@@ -3,6 +3,7 @@
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
+from models import storage
 from models.base_model import Base
 from models.city import City
 from models.state import State
@@ -31,7 +32,7 @@ class DBStorage:
         host = os.getenv('HBNB_MYSQL_HOST')
         database = os.getenv('HBNB_MYSQL_DB')
         user = os.getenv('HBNB_MYSQL_USER')
-        string = 'mysql+mysqldb://{}:{}@{}:3306/{}'.format(user,
+        string = 'mysql+mysqldb://{}:{}@{}/{}'.format(user,
                                                            password,
                                                            host,
                                                            database)
@@ -41,22 +42,26 @@ class DBStorage:
 
     def all(self, cls=None):
         """get all objects or objects of certain type"""
-        data = {}
-        if cls is None or cls.__name__ not in self.classes:
-            for i in self.classes.keys():
-                queried = self.__session.query(self.classes[i]).all()
-                for j in queried:
-                    key = j.__class__.__name__ + "." + j.id
-                    data[key] = j.to_dict()
+        classes = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
+        objects = {}
+
+        if cls:
+            if isinstance(cls, str):
+                cls = eval(cls)
+            for key, obj in storage.__objects.items():
+                if obj.__class__ == cls:
+                    objects[key] = obj
         else:
-            queried = self.__session.query(cls).all()
-            for j in queried:
-                key = j.__class__.__name__ + "." + j.id
-                data[key] = j.to_dict()
-        return data
+            for cls_name in classes:
+                cls = eval(cls_name)
+                for key, obj in storage.__objects.items():
+                    if obj.__class__ == cls:
+                        objects[key] = obj
+        return objects
 
     def new(self, obj):
         """add a new obj"""
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
         self.__session.add(obj)
 
     def save(self):
