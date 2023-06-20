@@ -11,6 +11,7 @@ def do_pack():
     of the web_static folder"""
     now = datetime.now()
     now = now.strftime('%Y%m%d%H%M%S')
+
     archive_path = 'versions/web_static_' + now + '.tgz'
 
     local('mkdir -p versions/')
@@ -18,5 +19,6 @@ def do_pack():
 
     if result.succeeded:
         return archive_path
-    return None
+    else:
+        return None
     
