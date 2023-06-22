@@ -55,7 +55,7 @@ file { '/data/web_static/current':
 # Update Nginx configuration
 file_line { 'nginx_config':
   path    => '/etc/nginx/sites-available/default',
-  line    => 'location /hbnb_static/ {}',
+  line    => 'location /hbnb_static/ {',
   match   => 'listen 80 default_server;',
   after   => 'listen 80 default_server;',
   notify  => Service['nginx'],
@@ -65,8 +65,8 @@ file_line { 'nginx_config':
 file_line { 'nginx_config_alias':
   path    => '/etc/nginx/sites-available/default',
   line    => "\t\talias /data/web_static/current/;",
-  match   => 'location /hbnb_static/ {}',
-  after   => 'location /hbnb_static/ {}',
+  match   => 'location /hbnb_static/ {',
+  after   => 'location /hbnb_static/ {',
   notify  => Service['nginx'],
   require => Package['nginx'],
 }
