@@ -33,9 +33,9 @@ class DBStorage:
         database = os.getenv('HBNB_MYSQL_DB')
         user = os.getenv('HBNB_MYSQL_USER')
         string = 'mysql+mysqldb://{}:{}@{}/{}'.format(user,
-                                                           password,
-                                                           host,
-                                                           database)
+                                                        password,
+                                                        host,
+                                                        database)
         self.__engine = sqlalchemy.create_engine(string, pool_pre_ping=True)
         if os.getenv("HBNB_ENV") == 'test':
             Base.metadata.drop_all(self.__engine)
