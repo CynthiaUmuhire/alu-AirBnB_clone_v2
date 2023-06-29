@@ -1,13 +1,15 @@
 #!/usr/bin/python3
+
+from models import storage
+from flask import Flask
+from flask import render_template
+
 """Starts a Flask web application.
 
 The application listens on 0.0.0.0, port 5000.
 Routes:
     /cities_by_states: HTML page with a list of all states and related cities.
 """
-from models import storage
-from flask import Flask
-from flask import render_template
 
 app = Flask(__name__)
 
